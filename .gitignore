@@ -1,0 +1,30 @@
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Datasets & Weights
+ai_model/weights/
+ai_model/data/
+ai_model/scripts/runs/
+*.pt
+*.onnx
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE & OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
