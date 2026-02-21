@@ -29,7 +29,7 @@ def load_classes():
 
 CLASSES = load_classes()
 # Initialize ONNX inference class. Point to the expected path of the exported model.
-MODEL_PATH = "../ai_model/scripts/runs/weights/cub_v1/weights/best.onnx" 
+MODEL_PATH = "../ai_model/weights/best.onnx" 
 detector = YOLOv8ONNX(MODEL_PATH, CLASSES)
 
 @app.get("/")
@@ -48,13 +48,12 @@ async def predict_bird(file: UploadFile = File(...)):
     if img is None:
         raise HTTPException(status_code=400, detail="Invalid image file or cannot be decoded.")
 
-    # Run inference with a much lower threshold because our model only trained for 1 epoch!
-    # A 1-epoch model on 200 classes will predict roughly 1/200 = 0.005 confidence on average.
-    predictions = detector.predict(img, conf_threshold=0.001)
+    # Run inference with a standard threshold now that we have a fully trained model.
+    predictions = detector.predict(img, conf_threshold=0.4)
     
     # Check if a bird was detected
     if len(predictions) == 0:
-        return {"detected": False, "message": "No bird found with confidence > 0.001. The 1-epoch model output is extremely noisy."}
+        return {"detected": False, "message": "No bird found with confidence > 0.4. Try a clearer image."}
     
     # Top prediction
     top_pred = predictions[0]
